@@ -31,7 +31,7 @@ import tarfile
 import zipfile
 import time
 
-ARCH = 'x86'
+ARCH = 'x86_x64'
 
 try:
     # For Python 3.0 and later
@@ -107,7 +107,7 @@ def main():
 	print('Trying to get tools from the packages folder...')
 
 	# Setup url and file paths
-	url = 'http://softwareupdate.vmware.com/cds/vmw-desktop/fusion/'
+	url = 'https://softwareupdate.vmware.com/cds/vmw-desktop/fusion/'
 
 	# Get the list of Fusion releases
 	# And get the last item in the ul/li tags
@@ -129,7 +129,7 @@ def main():
 	
 	parser.clean()
 
-	urlcoretar = url + lastVersion + '/' + ARCH + '/core/com.vmware.fusion.zip.tar'
+	urlcoretar = url + lastVersion + '/universal/core/com.vmware.fusion.zip.tar'
 			
 	# Get the main core file
 	try:
@@ -145,13 +145,13 @@ def main():
 	
 	print('Extracting files from com.vmware.fusion.zip...')
 	cdszip = zipfile.ZipFile(convertpath(dest + '/tools/com.vmware.fusion.zip'), 'r')
-	cdszip.extract('payload/VMware Fusion.app/Contents/Library/isoimages/darwin.iso', path=convertpath(dest + '/tools/'))
-	cdszip.extract('payload/VMware Fusion.app/Contents/Library/isoimages/darwinPre15.iso', path=convertpath(dest + '/tools/'))
+	cdszip.extract('payload/VMware Fusion.app/Contents/Library/isoimages/' + ARCH + '/darwin.iso', path=convertpath(dest + '/tools/'))
+	cdszip.extract('payload/VMware Fusion.app/Contents/Library/isoimages/' + ARCH + '/darwinPre15.iso', path=convertpath(dest + '/tools/'))
 	cdszip.close()
 	
 	# Move the iso and sig files to tools folder
-	shutil.move(convertpath(dest + '/tools/payload/VMware Fusion.app/Contents/Library/isoimages/darwin.iso'), convertpath(dest + '/tools/darwin.iso'))
-	shutil.move(convertpath(dest + '/tools/payload/VMware Fusion.app/Contents/Library/isoimages/darwinPre15.iso'), convertpath(dest + '/tools/darwinPre15.iso'))
+	shutil.move(convertpath(dest + '/tools/payload/VMware Fusion.app/Contents/Library/isoimages/' + ARCH + '/darwin.iso'), convertpath(dest + '/tools/darwin.iso'))
+	shutil.move(convertpath(dest + '/tools/payload/VMware Fusion.app/Contents/Library/isoimages/' + ARCH + '/darwinPre15.iso'), convertpath(dest + '/tools/darwinPre15.iso'))
 	
 	# Cleanup working files and folders
 	shutil.rmtree(convertpath(dest + '/tools/payload'), True)
